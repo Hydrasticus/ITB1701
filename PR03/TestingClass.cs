@@ -3,6 +3,14 @@
 namespace PR03 {
     class TestingClass {
         static void Main(string[] args) {
+            Table[] myTables = new Table[10];
+            Random rnd = new Random();
+            for (int i = 0; i < myTables.Length; i++) {
+                myTables[i] = new Table(rnd.Next(50, 200), rnd.Next(50, 200));
+                myTables[i].ShowData();
+            }
+            
+            /*
             VendingMachine vendingMachine = new VendingMachine();
             vendingMachine.DepositCoin(75);
             vendingMachine.GetDrink();
@@ -29,7 +37,8 @@ namespace PR03 {
             vendingMachine.GetDrink();
             vendingMachine.GetRefund();
             Console.WriteLine();
-
+            */
+            
             /*
             Person person1 = new Person();
             Console.WriteLine(person1.GetName());
