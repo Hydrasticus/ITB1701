@@ -10,11 +10,9 @@ namespace HW04 {
         private int _controlNumber;
         
         public IdCard() {
-            
         }
 
         public IdCard(string id) {
-            
         }
 
         public void DecodeId(string id) {
@@ -22,11 +20,7 @@ namespace HW04 {
             string birthYearFirstHalf;
 
             _sex = Int32.Parse(id.Substring(0, 1));
-            if (_sex % 2 == 0) {
-                sex = "mees";
-            } else {
-                sex = "naine";
-            }
+            sex = _sex % 2 == 0 ? "naine" : "mees";
 
             if (_sex == 1 || _sex == 2) {
                 birthYearFirstHalf = "18";
@@ -49,11 +43,7 @@ namespace HW04 {
             Console.WriteLine("Isik isikukoodiga {0} on sündinud {1}. Ta on {2}, " +
                               "kelle isikukood registreeriti {3} haiglas ja sel päeval oli ta {4} {5}. " +
                               "Isikukoodi kontrollnumbriks on {6}.",
-                id, date, _sex, _birthPlace, _controlNumber, _controlNumber, _controlNumber);
-        }
-
-        public void DefineBirthPlace() {
-            
+                id, date, sex, _birthPlace, _controlNumber, _controlNumber, _controlNumber);
         }
     }
 }
