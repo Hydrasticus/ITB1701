@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.Serialization;
-using System.Security.Cryptography;
 
 namespace HW04 {
     public class IdCode {
