@@ -3,11 +3,11 @@
 namespace HW04 {
     internal class Program {
         public static void Main(string[] args) {
-            IdCard idCard = new IdCard();
-            idCard.SetIdCard(39603066818);
+            IdCode idCode = new IdCode();
+            //idCode.SetIdCard(39603066818);
             
-            idCard.DecodeId();
-            Console.WriteLine(idCard.SetControlNumber());
+            //idCode.DecodeId();
+            Console.WriteLine(idCode.EncodeId("naine", "08/06/1885", "Tapa"));
             
             Console.ReadLine();
         }
