@@ -94,7 +94,7 @@ namespace HW04 {
             return idCode;
         }
         
-        public void GetBirthPlace(int birthCode) {
+        private void GetBirthPlace(int birthCode) {
             if (_birthDate < _invalidYear) {
                 switch (birthCode) {
                     case int i when (i >= 1 && i <= 10):
@@ -144,7 +144,7 @@ namespace HW04 {
             } else _birthArea = "teadmata haigla";
         }
 
-        public int GetBirthCode(string birthArea) {
+        private int GetBirthCode(string birthArea) {
             Random random = new Random();
             int area = 0;
             
@@ -181,7 +181,7 @@ namespace HW04 {
             return area;
         }
 
-        public int SetControlNumber(string id) {
+        private int SetControlNumber(string id) {
             // Creates the first module of numbers.
             List<int> module1 = new List<int>();
             for (int i = 1; i <= 9; i++) {
@@ -199,6 +199,7 @@ namespace HW04 {
             module2.Add(3);
             
             // Converts the id code to a list of integers.
+            // REDO!
             char[] idCode = id.ToCharArray();
             List<int> idNumbers = new List<int>();
             foreach (char c in idCode) {

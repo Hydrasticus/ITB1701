@@ -5,9 +5,8 @@ namespace HW04 {
     internal class Program {
         public static void Main(string[] args) {
             IdCode idCode = new IdCode();
-            //idCode.SetIdCard(39603066818);
-            
-            //idCode.DecodeId();
+            idCode.SetIdCard(39603066818);
+            idCode.DecodeId();
             
             List<int> idNumbers = new List<int>();
             idNumbers.Add(3);
