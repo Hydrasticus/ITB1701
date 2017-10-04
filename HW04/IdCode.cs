@@ -1,25 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace HW04 {
     public class IdCode {
-        private string _id, _sex, _birthDateString, _birthArea;
-        private DateTime _birthDate;
-        private readonly DateTime _invalidYear = new DateTime(2013, 1, 1);
+        private string _id, _sex, _birthDate, _birthArea;
         private int _birthCode, _controlNumber;
-        private const int INVALID_REMAINDER = 10;
-        //private string _readPath = "id.txt";
-        //private string _writePath = "info.txt";
-        
-        public void SetIdCard(long id) {
-            _id = id.ToString();
+        private readonly DateTime _invalidYear = new DateTime(2013, 1, 1);
+        private string _readPath = "id_codes.txt";
+        private string _writePath = "information.txt";
+
+        public IdCode() {
+        }
+
+        public IdCode(long id) {
+            if (id.ToString().Length != 11) {
+                Console.WriteLine("Invalid ID code!");
+            } else
+                _id = id.ToString();
+        }
+
+        public IdCode(string id) {
+            if (id.Length != 11) {
+                Console.WriteLine("Invalid ID code!");
+            } else
+                _id = id;
         }
         
-        public void SetIdCard(string id) {
-            _id = id;
+        public void SetIdCode(long id) {
+            if (id.ToString().Length != 11) {
+                Console.WriteLine("Invalid ID code!");
+            } else
+                _id = id.ToString();
         }
         
-        public void DecodeId() {
+        public void SetIdCode(string id) {
+            if (id.Length != 11) {
+                Console.WriteLine("Invalid ID code!");
+            } else
+                _id = id;
+        }
+        
+        // Method to print out information from the ID code.
+        public void PrintInfoFromId() {
+            if (_id == null) {
+                Console.WriteLine("Set an ID code first!");
+            } else {
+                DecodeId();
+        
+                Console.WriteLine("Isik isikukoodiga {0} on sündinud {1}. Ta on {2}, " +
+                                  "kelle isikukoodi registreerimiskoht oli {3}. " +
+                                  "Isikukoodi kontrollnumbriks on {4}.",
+                    _id, _birthDate, _sex, _birthArea, _controlNumber);
+            }
+        }
+
+        // Method for reading ID codes from a file and adding them into a list.
+        public List<string> ReadIdFromFile() {
+            List<string> listOfIdCodes = new List<string>();
+
+            using (StreamReader reader = new StreamReader(_readPath)) {
+                string line;
+                while ((line = reader.ReadLine()) != null) {
+                    listOfIdCodes.Add(line);
+                }
+            }
+                
+            Console.WriteLine("Loaded {0} ID codes from {1}.\n", listOfIdCodes.Count, _readPath);
+            return listOfIdCodes;
+        }
+        
+        // Method to parse out information from the ID code.
+        private void DecodeId() {
             // Determines sex.
             int sex = int.Parse(_id.Substring(0, 1));
             _sex = sex % 2 == 0 ? "naine" : "mees";
@@ -33,69 +85,80 @@ namespace HW04 {
             } else {
                 birthYearFirstHalf = "20";
             }
-            
+
             // Takes the second half of the birth year from the ID, appends it to the first half.
             string birthYearSecondHalf = _id.Substring(1, 2);
             string birthYear = birthYearFirstHalf + birthYearSecondHalf;
-            
+
             //Determines the month and day of birth.
             string birthMonth = _id.Substring(3, 2);
             string birthDay = _id.Substring(5, 2);
-            
+
             // Sets the birth date.
-            _birthDate = new DateTime(int.Parse(birthYear), 
-                int.Parse(birthMonth), int.Parse(birthDay));
-            _birthDateString = _birthDate.ToShortDateString();
-            
-            // Takes the control number from the ID.
-            _controlNumber = Int32.Parse(_id.Substring(10, 1));
-            
+            _birthDate = new DateTime(int.Parse(birthYear),
+                int.Parse(birthMonth), int.Parse(birthDay)).ToShortDateString();
+
             // Runs the method to determine the birth place according to the ID.
             _birthCode = int.Parse(_id.Substring(7, 3));
             GetBirthPlace(_birthCode);
             
-            Console.WriteLine("Isik isikukoodiga {0} on sündinud {1}. Ta on {2}, " +
-                "kelle isikukoodi registreerimiskoht oli {3}. " +
-                "Isikukoodi kontrollnumbriks on {4}.",
-                _id, _birthDateString, _sex, _birthArea, _controlNumber);
+            // Takes the control number from the ID.
+            _controlNumber = Int32.Parse(_id.Substring(10, 1));
         }
 
-        public List<int> EncodeId(string sex, string birthDate, string birthArea) {
-            List<int> idCode = new List<int>();
+        // Method for saving information taken from an ID code to a file.
+        public void SaveIdInfoToFile() {
+            if (_id == null) {
+                Console.WriteLine("Set an ID code first!");
+            } else {
+                DecodeId();
+    
+                using (StreamWriter writer = new StreamWriter(_writePath, true)) {
+                    writer.WriteLine("ID code: {0}; sex: {1}; date of birth: {2}; place of birth: {3}.",
+                        _id, _sex, _birthDate, _birthArea);
+                }
+                
+                Console.WriteLine("Saved information from ID {0} to {1}.\n", _id, _writePath);
+            }
+        }
+        
+        // Method to create an ID code using a person's sex, birth date and the area the person's birth was registered.
+        public void EncodeId(string sex, string birthDate, string birthArea) {
+            string idString = "";
 
-            int birthYear = DateTime.Parse(birthDate).Year;
+            int birthYear = int.Parse(birthDate.Substring(6, 4));
             
             // First number
             if (birthYear >= 1800 && birthYear <= 1899) {
-                idCode.Add(sex == "mees" ? 1 : 2);
+                idString += (sex == "mees" ? 1 : 2);
             } else if (birthYear >= 1900 && birthYear <= 1999) {
-                idCode.Add(sex == "mees" ? 3 : 4);
+                idString += (sex == "mees" ? 3 : 4);
             } else if (birthYear >= 2000 && birthYear <= 2099) {
-                idCode.Add(sex == "mees" ? 5 : 6);
+                idString += (sex == "mees" ? 5 : 6);
             }
-
+            
             // Second and third numbers
-            idCode.Add(int.Parse(birthYear.ToString().Substring(2, 2)));
+            idString += birthDate.Substring(8, 2);
             
             // Fourth and fifth numbers
-            int birthMonth = DateTime.Parse(birthDate).Month;
-            idCode.Add(birthMonth);
+            idString += birthDate.Substring(3, 2);
             
             // Sixth and seventh numbers
-            int birthDay = DateTime.Parse(birthDate).Day;
-            idCode.Add(birthDay);
+            idString += birthDate.Substring(0, 2);
             
             // Eighth to tenth numbers
-            idCode.Add(GetBirthCode(birthArea));
-
-            // Eleventh number
-            idCode.Add(SetControlNumber(idCode.ToString()));
+            idString += GetBirthCode(birthArea);
             
-            return idCode;
+            // Eleventh number
+            idString += SetControlNumber(idString);
+            
+            Console.WriteLine(idString);
+            _id = idString;
         }
         
+        // Method to determine the birth place using the code from ID.
         private void GetBirthPlace(int birthCode) {
-            if (_birthDate < _invalidYear) {
+            if (DateTime.Parse(_birthDate) < _invalidYear) {
                 switch (birthCode) {
                     case int i when (i >= 1 && i <= 10):
                         _birthArea = "Kuressaare Haigla";
@@ -141,12 +204,14 @@ namespace HW04 {
                         _birthArea = "teadmata haigla";
                         break;
                 }
-            } else _birthArea = "teadmata haigla";
+            } else
+                _birthArea = "teadmata haigla";
         }
 
-        private int GetBirthCode(string birthArea) {
+        // Method to determine the code in ID that corresponds to the birth place.
+        private static string GetBirthCode(string birthArea) {
+            int area;
             Random random = new Random();
-            int area = 0;
             
             if (birthArea.Contains("Kuressaare")) {
                 area = random.Next(1, 10);
@@ -178,53 +243,50 @@ namespace HW04 {
                 area = random.Next(651, 670);
             } else area = random.Next(671, 999);
 
-            return area;
+            return area.ToString();
         }
 
-        private int SetControlNumber(string id) {
-            // Creates the first module of numbers.
-            List<int> module1 = new List<int>();
-            for (int i = 1; i <= 9; i++) {
-                module1.Add(i);
+        // Method to set the last digit of the ID code using the previously set 10 digits.
+        private static int SetControlNumber(string id) {
+            // Converts the id string to a list of integers.
+            List<int> idNumbers = new List<int>();
+            foreach (char c in id) {
+                idNumbers.Add((int)Char.GetNumericValue(c));
             }
-            module1.Add(1);
+            
+            // Creates the first module of numbers.
+            string module1 = "1234567891";
+            List<int> module1Numbers = new List<int>();
+            foreach (char c in module1) {
+                module1Numbers.Add((int)Char.GetNumericValue(c));
+            }
             
             // Creates the second module.
-            List<int> module2 = new List<int>();
-            for (int i = 3; i <= 9; i++) {
-                module2.Add(i);
-            }
-            module2.Add(1);
-            module2.Add(2);
-            module2.Add(3);
-            
-            // Converts the id code to a list of integers.
-            // REDO!
-            char[] idCode = id.ToCharArray();
-            List<int> idNumbers = new List<int>();
-            foreach (char c in idCode) {
-                idNumbers.Add(int.Parse(c.ToString()));
+            string module2 = "3456789123";
+            List<int> module2Numbers = new List<int>();
+            foreach (char c in module2) {
+                module2Numbers.Add((int)Char.GetNumericValue(c));
             }
             
             int numberToCheck = 0;
 
             // Creates the first control number using the first module.
-            for (int i = 0; i < module1.Count; i++) {
-                numberToCheck += module1[i] * idNumbers[i];
+            for (int i = 0; i < module1Numbers.Count; i++) {
+                numberToCheck += module1Numbers[i] * idNumbers[i];
             }
-            numberToCheck = numberToCheck % id.Length;
+            numberToCheck = numberToCheck % 11;
             
             // Checks the control number against the invalid remainder, in case they are equal,
-            // creates it with the second module. If the condition remains true for the second number,
-            // sets the control number to zero.
-            if (numberToCheck == INVALID_REMAINDER) {
+            // recreates the control number with the second module. If the condition remains true 
+            // for the second number, sets the control number to zero.
+            if (numberToCheck == 10) {
                 numberToCheck = 0;
-                for (int i = 0; i < module2.Count; i++) {
-                    numberToCheck += module2[i] * idNumbers[i];
+                for (int i = 0; i < module2Numbers.Count; i++) {
+                    numberToCheck += module2Numbers[i] * idNumbers[i];
                 }
-                numberToCheck = numberToCheck % id.Length;
+                numberToCheck = numberToCheck % 11;
                 
-                if (numberToCheck == INVALID_REMAINDER) {
+                if (numberToCheck == 10) {
                     numberToCheck = 0;
                 }
             }

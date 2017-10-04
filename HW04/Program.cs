@@ -4,20 +4,18 @@ using System.Collections.Generic;
 namespace HW04 {
     internal class Program {
         public static void Main(string[] args) {
-            IdCode idCode = new IdCode();
-            idCode.SetIdCard(39603066818);
-            idCode.DecodeId();
+            IdCode idOne = new IdCode();
+            //idOne.SetIdCode("22212099821");
             
-            List<int> idNumbers = new List<int>();
-            idNumbers.Add(3);
-            idNumbers.Add(96);
-            idNumbers.Add(12);
-            idNumbers.Add(10);
-            idNumbers.Add(555);
+            IdCode idTwo = new IdCode(22212099821);
+            IdCode idThree = new IdCode("50005265314");
             
-            Console.WriteLine(idNumbers); //System.Collections.Generic.List`1[System.Int32]
+            //idOne.EncodeId("naine", "12.05.2005", "Tartu"); // Threw some kind of error.
             
-            //Console.WriteLine(idCode.EncodeId("mees", "10.12.1996", "Tapa").ToString());
+            List<string> idCodes = idOne.ReadIdFromFile();
+            foreach (string s in idCodes) {
+                Console.WriteLine(s);
+            }
             
             Console.ReadLine();
         }
