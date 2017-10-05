@@ -26,8 +26,18 @@ namespace PR05 {
             ConvertTemperature("13BC");
             ConvertTemperature("tere");
             */
-
+            
             // GenerateDetailCodes();
+            
+            /*
+            Console.WriteLine(PalindromeFinder("madam"));
+            Console.WriteLine(PalindromeFinder("racecar"));
+            Console.WriteLine(PalindromeFinder("dildo"));
+            Console.WriteLine(PalindromeFinder("mm"));
+            Console.WriteLine(PalindromeFinder("a"));
+            */
+            
+            GetNumberConsistency("43928");
             
             /*
             TvRemote tvRemote = new TvRemote();
@@ -69,24 +79,22 @@ namespace PR05 {
             Console.WriteLine("The soup temperature after 7 minutes is {0} degrees.", Math.Round(soupTemp, 2));
         }
 
-        public static bool RegistrationNumberValidator(string number) {
+        public static bool RegistrationNumberValidator(string numberString) {
             // Task 2
-
-            string regNumber = number;
-
-            if (regNumber.Length != 6) {
+            
+            if (numberString.Length != 6) {
                 return false;
             }
-
-            string numbers = regNumber.Substring(0, 3);
-            string letters = regNumber.Substring(3, 3);
-
+            
+            string numbers = numberString.Substring(0, 3);
+            string letters = numberString.Substring(3, 3);
+            
             if (!numbers.All(char.IsDigit) || !letters.All(char.IsLetter)) {
                 return false;
             }
             
             char[] unwantedLetters = new char[8] {'õ', 'ä', 'ö', 'ü', 'Õ', 'Ä', 'Ö', 'Ü'};
-
+            
             if (letters.IndexOfAny(unwantedLetters) != -1) {
                 return false;
             }
@@ -152,6 +160,36 @@ namespace PR05 {
 
                         writer.WriteLine(code);
                     }    
+                }
+            }
+        }
+
+        public static bool PalindromeFinder(string inputWord) {
+            // Task 5
+            
+            if (inputWord.Length >= 2) {
+                string outputWord = "";
+                char[] reversedWord = inputWord.ToCharArray();
+                
+                for (int i = inputWord.Length - 1; i >= 0; i--) {
+                    outputWord += reversedWord[i];
+                }
+                
+                if (inputWord == outputWord) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static void GetNumberConsistency(string number) {
+            // Task 6
+            // TODO for loop
+            
+            double output;
+            for (int i = number.Length - 1; i >= 0; i--) {
+                for (double j = 0; j < number.Length; j++) {
+                    output = Char.GetNumericValue(number[i]) * Math.Pow(10, j);
                 }
             }
         }
