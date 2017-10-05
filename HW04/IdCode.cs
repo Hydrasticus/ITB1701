@@ -9,17 +9,17 @@ namespace HW04 {
         private readonly DateTime _invalidYear = new DateTime(2013, 1, 1);
         private string _readPath = "id_codes.txt";
         private string _writePath = "information.txt";
-
+        
         public IdCode() {
         }
-
+        
         public IdCode(long id) {
             if (id.ToString().Length != 11) {
                 Console.WriteLine("Invalid ID code!");
             } else
                 _id = id.ToString();
         }
-
+        
         public IdCode(string id) {
             if (id.Length != 11) {
                 Console.WriteLine("Invalid ID code!");
@@ -44,17 +44,17 @@ namespace HW04 {
         // Method to print out information from the ID code.
         public void PrintInfoFromId() {
             if (_id == null) {
-                Console.WriteLine("Set an ID code first!");
+                Console.WriteLine("\nSet an ID code first!");
             } else {
                 DecodeId();
         
-                Console.WriteLine("Isik isikukoodiga {0} on sündinud {1}. Ta on {2}, " +
+                Console.WriteLine("\nIsik isikukoodiga '{0}' on sündinud {1}. Ta on {2}, " +
                                   "kelle isikukoodi registreerimiskoht oli {3}. " +
                                   "Isikukoodi kontrollnumbriks on {4}.",
                     _id, _birthDate, _sex, _birthArea, _controlNumber);
             }
         }
-
+        
         // Method for reading ID codes from a file and adding them into a list.
         public List<string> ReadIdFromFile() {
             List<string> listOfIdCodes = new List<string>();
@@ -66,7 +66,7 @@ namespace HW04 {
                 }
             }
                 
-            Console.WriteLine("Loaded {0} ID codes from {1}.\n", listOfIdCodes.Count, _readPath);
+            Console.WriteLine("\nLoaded {0} ID codes from '{1}'.", listOfIdCodes.Count, _readPath);
             return listOfIdCodes;
         }
         
@@ -104,56 +104,6 @@ namespace HW04 {
             
             // Takes the control number from the ID.
             _controlNumber = Int32.Parse(_id.Substring(10, 1));
-        }
-
-        // Method for saving information taken from an ID code to a file.
-        public void SaveIdInfoToFile() {
-            if (_id == null) {
-                Console.WriteLine("Set an ID code first!");
-            } else {
-                DecodeId();
-    
-                using (StreamWriter writer = new StreamWriter(_writePath, true)) {
-                    writer.WriteLine("ID code: {0}; sex: {1}; date of birth: {2}; place of birth: {3}.",
-                        _id, _sex, _birthDate, _birthArea);
-                }
-                
-                Console.WriteLine("Saved information from ID {0} to {1}.\n", _id, _writePath);
-            }
-        }
-        
-        // Method to create an ID code using a person's sex, birth date and the area the person's birth was registered.
-        public void EncodeId(string sex, string birthDate, string birthArea) {
-            string idString = "";
-
-            int birthYear = int.Parse(birthDate.Substring(6, 4));
-            
-            // First number
-            if (birthYear >= 1800 && birthYear <= 1899) {
-                idString += (sex == "mees" ? 1 : 2);
-            } else if (birthYear >= 1900 && birthYear <= 1999) {
-                idString += (sex == "mees" ? 3 : 4);
-            } else if (birthYear >= 2000 && birthYear <= 2099) {
-                idString += (sex == "mees" ? 5 : 6);
-            }
-            
-            // Second and third numbers
-            idString += birthDate.Substring(8, 2);
-            
-            // Fourth and fifth numbers
-            idString += birthDate.Substring(3, 2);
-            
-            // Sixth and seventh numbers
-            idString += birthDate.Substring(0, 2);
-            
-            // Eighth to tenth numbers
-            idString += GetBirthCode(birthArea);
-            
-            // Eleventh number
-            idString += SetControlNumber(idString);
-            
-            Console.WriteLine(idString);
-            _id = idString;
         }
         
         // Method to determine the birth place using the code from ID.
@@ -207,7 +157,57 @@ namespace HW04 {
             } else
                 _birthArea = "teadmata haigla";
         }
+        
+        // Method for saving information taken from an ID code to a file.
+        public void SaveIdInfoToFile() {
+            if (_id == null) {
+                Console.WriteLine("\nSet an ID code first!");
+            } else {
+                DecodeId();
+    
+                using (StreamWriter writer = new StreamWriter(_writePath, true)) {
+                    writer.WriteLine("ID code: {0}; sex: {1}; date of birth: {2}; place of birth: {3}.",
+                        _id, _sex, _birthDate, _birthArea);
+                }
+                
+                Console.WriteLine("\nSaved information from ID '{0}' to '{1}'.", _id, _writePath);
+            }
+        }
+        
+        // Method to create an ID code using a person's sex, birth date and the area the person's birth was registered.
+        public void EncodeId(string sex, string birthDate, string birthArea) {
+            string idString = "";
 
+            int birthYear = int.Parse(birthDate.Substring(6, 4));
+            
+            // First number
+            if (birthYear >= 1800 && birthYear <= 1899) {
+                idString += (sex == "mees" ? 1 : 2);
+            } else if (birthYear >= 1900 && birthYear <= 1999) {
+                idString += (sex == "mees" ? 3 : 4);
+            } else if (birthYear >= 2000 && birthYear <= 2099) {
+                idString += (sex == "mees" ? 5 : 6);
+            }
+            
+            // Second and third numbers
+            idString += birthDate.Substring(8, 2);
+            
+            // Fourth and fifth numbers
+            idString += birthDate.Substring(3, 2);
+            
+            // Sixth and seventh numbers
+            idString += birthDate.Substring(0, 2);
+            
+            // Eighth to tenth numbers
+            idString += GetBirthCode(birthArea);
+            
+            // Eleventh number
+            idString += SetControlNumber(idString);
+            
+            Console.WriteLine("\nSisestatud andmetele vastab isikukood: '{0}'", idString);
+            _id = idString;
+        }
+        
         // Method to determine the code in ID that corresponds to the birth place.
         private static string GetBirthCode(string birthArea) {
             int area;
@@ -242,10 +242,17 @@ namespace HW04 {
             } else if (birthArea.Contains("Võru") || birthArea.Contains("Põlva")) {
                 area = random.Next(651, 670);
             } else area = random.Next(671, 999);
+            
+            string areaString = "";
 
-            return area.ToString();
+            for (int i = 0; i < (3 - area.ToString().Length) ; i++) {
+                areaString += "0";
+            }
+
+            areaString += area.ToString();
+            return areaString;
         }
-
+        
         // Method to set the last digit of the ID code using the previously set 10 digits.
         private static int SetControlNumber(string id) {
             // Converts the id string to a list of integers.
