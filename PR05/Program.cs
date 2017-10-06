@@ -37,7 +37,7 @@ namespace PR05 {
             Console.WriteLine(PalindromeFinder("a"));
             */
             
-            GetNumberConsistency("43928");
+            // GetNumberConsistency("5");
             
             /*
             TvRemote tvRemote = new TvRemote();
@@ -184,13 +184,13 @@ namespace PR05 {
 
         public static void GetNumberConsistency(string number) {
             // Task 6
-            // TODO for loop
             
-            double output;
+            int j = 0;
+
             for (int i = number.Length - 1; i >= 0; i--) {
-                for (double j = 0; j < number.Length; j++) {
-                    output = Char.GetNumericValue(number[i]) * Math.Pow(10, j);
-                }
+                double output = char.GetNumericValue(number[i]) * Math.Pow(10, j);
+                Console.WriteLine(output);
+                j++;
             }
         }
     }
