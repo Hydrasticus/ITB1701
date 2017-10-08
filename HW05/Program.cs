@@ -5,17 +5,18 @@ using System.IO;
 namespace HW05 {
     internal class Program {
         public static void Main(string[] args) {
-            //FindCompoundInterest(2200, 0, -2);
-            //FindCompoundInterest(2200, 2.1, 2);
-            //FindCompoundInterest(2200, 2.1, 2);
+            FindCompoundInterest(2200, 0, -2);
+            FindCompoundInterest(2200, -5, 2);
+            FindCompoundInterest(-2200, 2.1, 2);
+            FindCompoundInterest(2200, 2.1, 2);
             
-            //FixIdCodes();
-
-            //List<int> ints = new List<int>() { 3, 5, 3, 11, 9 };
-            //List<int> ints2 = new List<int>() { 7, 5, 3, 9 };
+            FixIdCodes();
             
-            //GetMedianAndArithmeticMean(ints);
-            //GetMedianAndArithmeticMean(ints2);
+            List<int> ints = new List<int>() { 3, 5, 3, 11, 9 };
+            List<int> ints2 = new List<int>() { 7, 5, 3, 9 };
+            
+            GetMedianAndArithmeticMean(ints);
+            GetMedianAndArithmeticMean(ints2);
             
             GetMoney(207);
             GetMoney(101);
@@ -23,8 +24,37 @@ namespace HW05 {
             GetMoney(100);
             GetMoney(1);
             GetMoney(0);
-            GetMoney(100);
-
+            GetMoney(-1);
+            GetMoney(1000);
+            
+            TvRemote tvRemote = new TvRemote();
+            tvRemote.ChangeChannel(5);
+            tvRemote.PreviousChannel();
+            tvRemote.NextChannel();
+            tvRemote.DecreaseVolume();
+            tvRemote.IncreaseVolume();
+            
+            tvRemote.PowerButton();
+            tvRemote.PowerButton();
+            tvRemote.PowerButton();
+            
+            tvRemote.ChangeChannel(-1);
+            tvRemote.ChangeChannel(101);
+            tvRemote.ChangeChannel(0);
+            tvRemote.PreviousChannel();
+            tvRemote.NextChannel();
+            tvRemote.ChangeChannel(100);
+            tvRemote.NextChannel();
+            tvRemote.PreviousChannel();
+            
+            tvRemote.DecreaseVolume();
+            tvRemote.IncreaseVolume();
+            tvRemote.IncreaseVolume();
+            tvRemote.IncreaseVolume();
+            tvRemote.IncreaseVolume();
+            tvRemote.IncreaseVolume();
+            tvRemote.IncreaseVolume();
+            
             Console.ReadLine();
         }
 
@@ -110,29 +140,38 @@ namespace HW05 {
         }
 
         public static void GetMoney(int money) {
-            // TODO: the whole damn method (too complicated at the moment)
-            
             if (money < 0 || money > 999) {
-                Console.WriteLine("The minimum amount is 0 EUR and maximum 9 EUR 99 cents.");
+                Console.WriteLine("Invalid sum! The minimum amount is 0 EUR and maximum 9 EUR 99 cents.");
             } else {
                 string moneyString = money.ToString();
-                string cents = "senti";
-
-                if (money == 1) {
-                    Console.WriteLine("{0} sent", money);
-                }
                 
                 if (money < 100) {
-                    Console.WriteLine("{0} senti", money);
+                    if (money == 1) {
+                        Console.WriteLine("1 sent");
+                    } else
+                        Console.WriteLine("{0} senti", money);
                 } else {
-                    if (moneyString[0] == 1) {
-                        if (moneyString[2] == 1) {
-                            Console.WriteLine("{0} euro ja {1} sent", moneyString[0], moneyString[2]);
-                        } else {
-                            Console.WriteLine("{0} euro ja {1} senti", moneyString[0], (money - 100));
-                        }
-                    } else 
-                        Console.WriteLine("{0} eurot ja {1} senti", moneyString[0], moneyString[1]);
+                    int fullEur = int.Parse(char.GetNumericValue(moneyString[0]).ToString());
+                    int cents = int.Parse(char.GetNumericValue(moneyString[1]).ToString() + 
+                                          char.GetNumericValue(moneyString[2]).ToString());
+                    
+                    string eurFormat = "eurot";
+                    string centsFormat = "senti";
+                    
+                    if (fullEur == 1) {
+                        eurFormat = "euro";
+                    }
+                    
+                    if (cents == 1) {
+                        centsFormat = "sent";
+                    }
+                    
+                    if (cents == 0) {
+                        Console.WriteLine("{0} {1}", fullEur, eurFormat);
+                    } else {
+                        Console.WriteLine("{0} {1} ja {2} {3}",
+                        fullEur, eurFormat, cents, centsFormat);
+                    }
                 }
             }
         }
