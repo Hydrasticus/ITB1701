@@ -13,7 +13,7 @@ namespace HW06 {
     }
     
     public class RegularIron : IIroningMachines {
-        internal bool _isPowerOn;
+        internal bool _isPowerOn = true;
         internal const int COTTON_MAX = 199, SILK_MAX = 149, SYNTHETICS_MAX = 119, MINIMUM_TEMP = 90;
         internal int _temperature, _ironingCounter = 0, _steamSwitch = 0;
         internal const string OUTPUT_PROGRAM = "{0} is ironing with {1} program.";

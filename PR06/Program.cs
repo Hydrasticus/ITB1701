@@ -9,7 +9,7 @@ namespace PR06 {
             void Travel(string destination);
         }
 
-        public class Dog : IAnimal{
+        public class Dog : IAnimal {
             public void Travel(string destination) {
                 Console.WriteLine("Dog travels to {0}", destination);
             }
@@ -19,7 +19,7 @@ namespace PR06 {
             }
         }
         
-        public class Rabbit : IAnimal{
+        public class Rabbit : IAnimal {
             public void Travel(string destination) {
                 Console.WriteLine("Rabbit goes to " + destination);
             }
@@ -30,7 +30,7 @@ namespace PR06 {
         }
 
         // Class inheritance: Exercise 2
-        public class ParentClass{
+        public class ParentClass {
             public ParentClass() {
                 Console.WriteLine("Parent Constructor.");
             }
@@ -51,7 +51,7 @@ namespace PR06 {
             void Draw();
         }
 
-        public class Shape : IShape{
+        public class Shape : IShape {
             public virtual void Draw() { // virtual means this method can be overwritten
                 Console.WriteLine("I am a shape!");
             }
