@@ -13,15 +13,20 @@ namespace HW06 {
     }
     
     public class RegularIron : IIroningMachines {
-        internal bool _isPowerOn = true;
-        internal const int COTTON_MAX = 199, SILK_MAX = 149, SYNTHETICS_MAX = 119, MINIMUM_TEMP = 90;
-        internal int _temperature, _ironingCounter = 0, _steamSwitch = 0;
+        internal bool _isPowerOn, _isSteamOn;
+        internal int _temperature, _ironingCounter = 0;
+        internal const int LINEN_MIN = 200;
+        private const int COTTON_MIN = 150, SILK_MIN = 120, MINIMUM_TEMP = 90;
+        internal string _machineType, _program;
         internal const string OUTPUT_PROGRAM = "{0} is ironing with {1} program.";
         internal const string OUTPUT_TEMP = "{0} is ironing with {1} degrees.";
-        private const string MACHINE_TYPE = "Regular machine";
-        internal string _program;
-        internal Random _random = new Random();
+        internal Random random = new Random();
 
+        public RegularIron() {
+            _machineType = "Regular machine";
+            _isPowerOn = true;
+        }
+        
         public void Descale() {
             if (!_isPowerOn) {
                 Console.WriteLine("Turn the machine on first!");
@@ -37,27 +42,32 @@ namespace HW06 {
             } else {
                 if (_ironingCounter != 3) {
                     _temperature = temperature;
-                    string output = string.Format(OUTPUT_PROGRAM, MACHINE_TYPE, _program);
+                    string output;
 
-                    if (_steamSwitch == 1) {
-                        output += " Ironing with steam.";
-                    }
-
-                    if (_temperature >= MINIMUM_TEMP && _temperature <= SYNTHETICS_MAX) {
+                    if (_temperature >= MINIMUM_TEMP && _temperature < SILK_MIN) {
                         _program = "Synthetics";
-                        Console.WriteLine(output);
-                    } else if (_temperature > SYNTHETICS_MAX && _temperature <= SILK_MAX) {
+                        output = string.Format(OUTPUT_PROGRAM, _machineType, _program);
+                    } else if (_temperature >= SILK_MIN && _temperature < COTTON_MIN) {
                         _program = "Silk";
-                        Console.WriteLine(output);
-                    } else if (_temperature > SILK_MAX && _temperature <= COTTON_MAX) {
+                        output = string.Format(OUTPUT_PROGRAM, _machineType, _program);
+                    } else if (_temperature >= COTTON_MIN && _temperature < LINEN_MIN) {
                         _program = "Cotton";
-                        Console.WriteLine(output);
+                        output = string.Format(OUTPUT_PROGRAM, _machineType, _program);
                     } else {
-                        Console.WriteLine("Invalid temperature range for ironing!");
+                        output = "Invalid temperature range for ironing!";
                     }
                     
+                    if (_isSteamOn) {
+                        if (_temperature >= SILK_MIN) {
+                            output += " Ironing with steam.";
+                        } else
+                            Console.WriteLine("The temperature must be at least 120 degrees to use steam!");
+                    }
+
+                    Console.WriteLine(output);
+                    
                     _ironingCounter++;
-                    _steamSwitch = 0;
+                    _isSteamOn = false;
                 } else
                     Console.WriteLine("The machine has been used 3 times and needs cleaning.");
             }
@@ -68,27 +78,32 @@ namespace HW06 {
                 Console.WriteLine("Turn the machine on first!");
             } else {
                 if (_ironingCounter != 3) {
-                    string output = string.Format(OUTPUT_TEMP, MACHINE_TYPE, _temperature);
-
-                    if (_steamSwitch == 1) {
-                        output += " Ironing with steam.";
+                    string output;
+                    
+                    if (program == "Synthetics" || program == "synthetics") {
+                        _temperature = random.Next(MINIMUM_TEMP, SILK_MIN);
+                        output = string.Format(OUTPUT_TEMP, _machineType, _temperature);
+                    } else if (program == "Silk" || program == "silk") {
+                        _temperature = random.Next(SILK_MIN, COTTON_MIN);
+                        output = string.Format(OUTPUT_TEMP, _machineType, _temperature);
+                    } else if (program == "Cotton" || program == "cotton") {
+                        _temperature = random.Next(COTTON_MIN, LINEN_MIN);
+                        output = string.Format(OUTPUT_TEMP, _machineType, _temperature);
+                    } else {
+                        output = "Invalid program!";
                     }
 
-                    if (program == "Synthetics" || program == "synthetics") {
-                        _temperature = _random.Next(MINIMUM_TEMP, SYNTHETICS_MAX + 1);
-                        Console.WriteLine(output);
-                    } else if (program == "Silk" || program == "silk") {
-                        _temperature = _random.Next(SYNTHETICS_MAX + 1, SILK_MAX + 1);
-                        Console.WriteLine(output);
-                    } else if (program == "Cotton" || program == "cotton") {
-                        _temperature = _random.Next(SILK_MAX + 1, COTTON_MAX + 1);
-                        Console.WriteLine(output);
-                    } else {
-                        Console.WriteLine("Invalid program!");
+                    if (_isSteamOn) {
+                        if (_temperature >= SILK_MIN) {
+                            output += " Ironing with steam.";
+                        } else
+                            Console.WriteLine("The temperature must be at least 120 degrees to use steam!");
                     }
                     
+                    Console.WriteLine(output);
+                    
                     _ironingCounter++;
-                    _steamSwitch = 0;
+                    _isSteamOn = false;
                 } else
                     Console.WriteLine("The machine has been used 3 times and needs cleaning.");
             }
@@ -98,12 +113,10 @@ namespace HW06 {
             if (!_isPowerOn) {
                 Console.WriteLine("Turn the machine on first!");
             } else {
-                if (_steamSwitch == 1) {
+                if (_isSteamOn) {
                     Console.WriteLine("The steam is already on!");
-                } else if (_temperature <= SYNTHETICS_MAX) {
-                    Console.WriteLine("The temperature must be at least 120 degrees to use steam!");
                 } else
-                    _steamSwitch = 1;
+                    _isSteamOn = true;
             }
         }
 
@@ -121,14 +134,18 @@ namespace HW06 {
                 Console.WriteLine("Machine is already turned off!");
             } else {
                 _isPowerOn = false;
-                Console.WriteLine("Machine turned off!");
+                Console.WriteLine("Machine turned off.");
             }
         }
     }
 
     public class LinenIron : RegularIron {
         private const int LINEN_MAX = 230;
-        private const string MACHINE_TYPE = "Linen machine";
+
+        public LinenIron() {
+            _machineType = "Linen machine";
+            _isPowerOn = true;
+        }
         
         public override void DoIroning(int temperature) {
             if (!_isPowerOn) {
@@ -136,17 +153,16 @@ namespace HW06 {
             } else {
                 if (_ironingCounter != 3) {
                     _temperature = temperature;
-                    string output = string.Format(OUTPUT_PROGRAM, MACHINE_TYPE, _program);
 
-                    if (_steamSwitch == 1) {
-                        output += " Ironing with steam.";
-                    }
-
-                    if (_temperature > SILK_MAX && _temperature <= LINEN_MAX) {
+                    if (_temperature >= LINEN_MIN && _temperature <= LINEN_MAX) {
                         _program = "Linen";
+                        string output = string.Format(OUTPUT_PROGRAM, _machineType, _program)
+                                        + " Ironing with steam.";
+                        
                         Console.WriteLine(output);
+                        
                         _ironingCounter++;
-                        _steamSwitch = 0;
+                        _isSteamOn = false;
                     } else
                         base.DoIroning(temperature);
                 } else
@@ -159,18 +175,16 @@ namespace HW06 {
                 Console.WriteLine("Turn the machine on first!");
             } else {
                 if (_ironingCounter != 3) {
-                    string output = string.Format(OUTPUT_TEMP, MACHINE_TYPE, _temperature);
-
-                    if (_steamSwitch == 1) {
-                        output += " Ironing with steam.";
-                    }
 
                     if (program == "Linen" || program == "linen") {
-                        _temperature = _random.Next(COTTON_MAX + 1, LINEN_MAX + 1);
-                        UseSteam();
+                        _temperature = random.Next(LINEN_MIN, LINEN_MAX + 1);
+                        string output = string.Format(OUTPUT_TEMP, _machineType, _temperature)
+                                        + " Ironing with steam.";
+                        
                         Console.WriteLine(output);
+
                         _ironingCounter++;
-                        _steamSwitch = 0;
+                        _isSteamOn = false;
                     } else
                         base.DoIroning(program);
                 } else
@@ -180,9 +194,14 @@ namespace HW06 {
     }
     
     public class PremiumIron : RegularIron {
-        private int _waterIndicator;
-        private int _steamCounter;
-        private const string MACHINE_TYPE = "Premium machine";
+        private bool _isWaterIndicatorOn;
+        private int _steamUsageCounter;
+
+        public PremiumIron() {
+            _machineType = "Premium machine";
+            _isPowerOn = true;
+            _isWaterIndicatorOn = false;
+        }
         
         public override void DoIroning(int temperature) {
             if (!_isPowerOn) {
@@ -212,12 +231,12 @@ namespace HW06 {
             } else {
                 base.UseSteam();
 
-                if (_waterIndicator == 1) {
+                if (_isWaterIndicatorOn) {
                     Console.WriteLine("Add more water to use steam!");
-                } else if (_steamCounter != 2) {
-                    _steamCounter++;
+                } else if (_steamUsageCounter != 2) {
+                    _steamUsageCounter++;
                 } else
-                    _waterIndicator = 1;
+                    _isWaterIndicatorOn = true;
             }
         }
     }
