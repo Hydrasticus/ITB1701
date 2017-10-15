@@ -1,8 +1,6 @@
 ﻿using System;
 
 namespace HW06 {
-    // TODO: test classes and methods
-    
     interface IIroningMachines {
         void Descale();
         void DoIroning(int temperature);
@@ -65,8 +63,11 @@ namespace HW06 {
                     }
 
                     Console.WriteLine(output);
+
+                    if (output != "Invalid temperature range for ironing!") {
+                        _ironingCounter++;
+                    }
                     
-                    _ironingCounter++;
                     _isSteamOn = false;
                 } else
                     Console.WriteLine("The machine has been used 3 times and needs cleaning.");
@@ -102,7 +103,10 @@ namespace HW06 {
                     
                     Console.WriteLine(output);
                     
-                    _ironingCounter++;
+                    if (output != "Invalid temperature range for ironing!") {
+                        _ironingCounter++;
+                    }
+                    
                     _isSteamOn = false;
                 } else
                     Console.WriteLine("The machine has been used 3 times and needs cleaning.");
@@ -175,7 +179,6 @@ namespace HW06 {
                 Console.WriteLine("Turn the machine on first!");
             } else {
                 if (_ironingCounter != 3) {
-
                     if (program == "Linen" || program == "linen") {
                         _temperature = random.Next(LINEN_MIN, LINEN_MAX + 1);
                         string output = string.Format(OUTPUT_TEMP, _machineType, _temperature)
@@ -232,7 +235,7 @@ namespace HW06 {
                 base.UseSteam();
 
                 if (_isWaterIndicatorOn) {
-                    Console.WriteLine("Add more water to use steam!");
+                    Console.WriteLine("Warning: water supply running low! Add water soon!");
                 } else if (_steamUsageCounter != 2) {
                     _steamUsageCounter++;
                 } else
