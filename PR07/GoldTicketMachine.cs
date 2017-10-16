@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PR07 {
     public class GoldTicketMachine : BronzeTicketMachine {
-        // TODO: fix
-        
         internal const int REQ_COUNT = 4;
         internal const double DISCOUNT = 0.2;
         private List<int> _prices = new List<int>() {5, 7, 9};
@@ -16,6 +15,15 @@ namespace PR07 {
             _ticketType = ticketType;
         }
 
+        public override void SellTicket(int distance) {
+            if (distance >= 0 && distance <= 80) {
+                _ticketCounter++;
+                FindPrice(distance);
+                ShowTicketInfo();
+            } else 
+                Console.WriteLine("Invalid distance: {0}. Ticket not sold.", distance);
+        }
+        
         internal override void FindPrice(int distance) {
             base.FindPrice(distance);
             switch (_zone) {
@@ -35,7 +43,7 @@ namespace PR07 {
         private void CalculateDiscount() {
             if (_ticketCounter == REQ_COUNT) {
                 _ticketCounter = 0;
-                _price = _price * DISCOUNT;
+                _price -= _price * DISCOUNT;
             }
         }
     }

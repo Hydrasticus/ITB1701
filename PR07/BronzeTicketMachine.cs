@@ -18,20 +18,16 @@ namespace PR07 {
             if (distance >= 0 && distance <= 80) {
                 _ticketCounter++;
                 FindPrice(distance);
+                CalculateDiscount();
                 ShowTicketInfo();
             } else 
                 Console.WriteLine("Invalid distance: {0}. Ticket not sold.", distance);
         }
-
-        internal override void FindPrice(int distance) {
-            base.FindPrice(distance);
-            CalculateDiscount();
-        }
-
+        
         private void CalculateDiscount() {
             if (_ticketCounter == REQ_COUNT) {
                 _ticketCounter = 0;
-                _price = _price * DISCOUNT;
+                _price -= _price * DISCOUNT;
             }
         }
     }
