@@ -7,9 +7,10 @@ namespace HW09 {
             return a + b;
         }
 
-        public List<int> ReturnAnArray() {
-            List<int> listOfInts = new List<int>();
-
+        public int[] ReturnArray() {
+            //TODO
+            int[] listOfInts = new int[6];
+            
             return listOfInts;
         }
 
