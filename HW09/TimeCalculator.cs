@@ -2,8 +2,6 @@
 
 namespace HW09 {
     public class TimeCalculator {
-        //TODO
-        
         DateTime _initialTime = new DateTime(2000, 1, 1);
 
         public DateTime FindTime(double hours) {
@@ -17,5 +15,7 @@ namespace HW09 {
         public DateTime SubtractDay(double days) {
             return _initialTime.AddDays(-Math.Abs(days));
         }
+        
+        
     }
 }

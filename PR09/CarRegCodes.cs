@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace PR09 {
     public class CarRegCodes {
-        Random _random = new Random();
-        public List<string> _codes = new List<string>();
+        Random random = new Random();
+        public List<string> codes = new List<string>();
 
         public List<string> GenerateFourCodes(string value) {
-            while (_codes.Count < 4) {
+            while (codes.Count < 4) {
                 string regCode = GenerateCode(value);
-                if (!_codes.Contains(regCode)) {
-                    _codes.Add(regCode);
+                if (!codes.Contains(regCode)) {
+                    codes.Add(regCode);
                 }
             }
 
-            return _codes;
+            return codes;
         }
         
         public string GenerateCode(string input) {
@@ -23,7 +23,7 @@ namespace PR09 {
             
             if (input.Length == 3) {
                 if (input.All(char.IsDigit)) {
-                    while (_codes.Count < 4) {
+                    while (codes.Count < 4) {
                         regCode = input + GenerateThreeLetters();
                     }
                 } else {
@@ -37,7 +37,7 @@ namespace PR09 {
         public string GenerateThreeNumbers() {
             string numbers = "";
             for (int i = 0; i < 3; i++) {
-                numbers += _random.Next(1, 11);
+                numbers += random.Next(1, 11);
             }
             return numbers;
         }
@@ -47,7 +47,7 @@ namespace PR09 {
             char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
             for (int i = 0; i < 3; i++) {
-                letters += alphabet[_random.Next(alphabet.Length)];
+                letters += alphabet[random.Next(alphabet.Length)];
             }
             return letters;
         }
