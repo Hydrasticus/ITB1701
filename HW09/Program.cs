@@ -5,7 +5,11 @@ namespace HW09 {
     internal class Program {
         public static void Main(string[] args) {
             Exercises exercise = new Exercises();
+
+            string email = "Mary.Jones@gmail.com";
+            Console.WriteLine(email.Split('@').ToString());
             
+
             /*
             TimeCalculator calc = new TimeCalculator();
             Console.WriteLine(calc.FindTime(+2));
@@ -17,6 +21,8 @@ namespace HW09 {
 
             Console.WriteLine(calc.SubtractDay(5));
             Console.WriteLine(calc.SubtractDay(10));*/
+
+            Console.ReadLine();
         }
     }
 }
