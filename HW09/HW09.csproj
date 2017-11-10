@@ -52,6 +52,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeCalculator.cs" />
+    <Compile Include="TimeCalculatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

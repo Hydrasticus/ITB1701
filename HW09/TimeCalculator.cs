@@ -15,7 +15,5 @@ namespace HW09 {
         public DateTime SubtractDay(double days) {
             return _initialTime.AddDays(-Math.Abs(days));
         }
-        
-        
     }
 }
