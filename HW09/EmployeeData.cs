@@ -10,7 +10,7 @@ namespace HW09 {
             
             string firstName = FirstToUpper(nameArray[0]);
             string lastName = FirstToUpper(nameArray[1]);
-
+            
             firstName = NameToCorrectFormat(firstName, '-', ' ');
             lastName = NameToCorrectFormat(lastName, '_', '-');
 
@@ -22,15 +22,19 @@ namespace HW09 {
                 if (name.Contains(initChar.ToString())) {
                     string[] nameArray = name.Split(initChar);
                     List<string> names = new List<string>();
-
+                    
                     foreach (string nameInArray in nameArray) {
-                        names.Add(nameInArray);
+                        names.Add(FirstToUpper(nameInArray));
                     }
-
+                    
                     name = string.Join(resultChar.ToString(), names);
+                } else {
+                    name = FirstToUpper(name);
                 }
-            } else name = "Unknown";
-
+            } else {
+                name = "Unknown";
+            }
+            
             return name;
         }
 
