@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using HW10.Ex1;
+using HW10.Ex2;
 
 namespace HW10 {
     internal class Program {
@@ -21,6 +23,14 @@ namespace HW10 {
             } catch (NullReferenceException) {
                 Console.WriteLine("There is no dog there! *BREATHING INTENSIFIES*");
             }
+            
+            Library library = new Library("Tartu");
+            Book potter = new Book("Harry Potter and the Order of the Phoenix");
+            Book bullerby = new Book("Bullerby lapsed", "Astrid Lindgren");
+            library.AddBook(potter);
+            library.AddBook(bullerby);
+
+            library.BorrowBook("Potter");
         }
     }
 }

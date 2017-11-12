@@ -4,48 +4,69 @@ using System.Linq;
 
 namespace HW10.Ex2 {
     class Library {
-        //books in the library are kept in a list with object type of book
+        private string _name, _address;
         List<Book> _listOfBooks = new List<Book>();
 
-        //method for adding book to the library
+        public Library(string name) {
+            _name = name;
+        }
+
+        public void PrintInfo() {
+            Console.WriteLine("Library with name '{0}' is located in {1} and has {2} books.",
+                _name, _address, GetNumberOfBooksInLibrary());
+        }
+        
+        public string Name {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        public string Address {
+            get { return _address; }
+            set { _address = value; }
+        }
+
         public void AddBook(Book bookToAdd) {
             _listOfBooks.Add(bookToAdd);
         }
 
-        //method for getting the number of all books in the library
         public int GetNumberOfBooksInLibrary() {
             return _listOfBooks.Count();
         }
 
-        //this method returns the FIRST book which contains the name
         public Book FindBookByName(string bookName) {
-            foreach (Book a in _listOfBooks) {
-                if (a.Title.Contains(bookName)) {
-                    return a; //return the FIRST book that contains the name
-                }
-            }
-            return null; //we did not find the book
-        }
-
-        //this method returns ALL BOOKS which contains the name
-        //the books are returned as a list of books
-        public List<Book> FindAllBooksByName(string bookName) {
-            //list for returning the results
-            List<Book> booksToReturn = new List<Book>();
-
-            //to search for results, we have to iterate through all books
             foreach (Book book in _listOfBooks) {
                 if (book.Title.Contains(bookName)) {
-                    //if book title contains our search term, we add it to return list
-                    booksToReturn.Add(book); //return the book that contains the name
+                    return book;
                 }
             }
-            //returns the list
-            //if we found no books, the list is empty
+            return null;
+        }
+
+        public List<Book> FindAllBooksByName(string bookName) {
+            List<Book> booksToReturn = new List<Book>();
+
+            foreach (Book book in _listOfBooks) {
+                if (book.Title.Contains(bookName)) {
+                    booksToReturn.Add(book);
+                }
+            }
+            
             return booksToReturn;
         }
 
-        //how we could sort list
+        public List<Book> FindBooksByAuthor(string authorName) {
+            List<Book> booksToReturn = new List<Book>();
+
+            foreach (Book book in _listOfBooks) {
+                if (book.Author.Contains(authorName)) {
+                    booksToReturn.Add(book);
+                }
+            }
+
+            return booksToReturn;
+        }
+        
         public List<Book> GetBooksSortedByTitle() {
             return _listOfBooks.OrderBy(book => book.Title).ToList();
         }
@@ -58,31 +79,28 @@ namespace HW10.Ex2 {
                     booksToReturn.Add(book);
                 }
             }
-            //just for our own info:
 
             return booksToReturn;
         }
 
         public void PrintAllBooksWithCertainGenre(BookGenre genre) {
-            //find all books with given genre
             List<Book> books = FindAllBooksWithCertainGenre(genre);
 
-            Console.WriteLine("\n-All books with genre {0}  are :", genre);
+            Console.WriteLine("\n- All books with genre {0} are:", genre);
 
-            //then we print them
             foreach (Book book in books) {
-                Console.WriteLine(book.Title);
+                Console.WriteLine("-- " + book.Title);
             }
         }
 
-        //we return a bool indicating weather a borrowing was successful
+        //we return a bool indicating whether a borrowing was successful
         public bool BorrowBook(string bookName) {
             bool wasBorrowingSuccessful = false;
 
             //we can only borrow if we have this book
             List<Book> books = FindAllBooksByName(bookName);
 
-            //we want to borrow out the first non borrowed book
+            //we want to borrow out the first non-borrowed book
             foreach (Book book in books) {
                 //if the book is not already borrowed out
                 if (book.GetBorrowedStatus() != true) {
@@ -92,35 +110,62 @@ namespace HW10.Ex2 {
                     wasBorrowingSuccessful = true;
                 }
             }
+            
             return wasBorrowingSuccessful;
         }
 
-        //method for printing out all book titles in the library
+        public bool ReturnBook(string bookName) {
+            bool wasReturningSuccessful = false;
+            List<Book> books = FindAllBooksByName(bookName);
+            
+            foreach (Book book in books) {
+                if (book.GetBorrowedStatus()) {
+                    book.ReturnBook();
+                    wasReturningSuccessful = true;
+                }
+            }
+            
+            return wasReturningSuccessful;
+        }
+
         public void PrintAllBookTitlesInLibrary() {
-            Console.WriteLine("\n-All books are: ");
+            Console.WriteLine("\n- All books are:");
             foreach (Book book in _listOfBooks) {
-                Console.WriteLine(book.Title);
+                Console.Write("-- ");
+                book.PrintInfo();
             }
         }
 
-        public bool ReturnBook(string bookName) {
-            //we can only return a book
-            //that is in the library and with a status "isBorrowed==true"
-            
-            return false;
-        }
-
-        //lets print all the books that contain certain title
         public void PrintAllBooksByName(string title) {
-            //first we find the books
             List<Book> books = FindAllBooksByName(title);
 
-            Console.WriteLine("\n-All books containing term {0} in title are :", title);
-
-            //then we print them
+            Console.WriteLine("\n- All books containing term '{0}' in title are:", title);
             foreach (Book book in books) {
-                Console.WriteLine(book.Title);
+                Console.Write("-- ");
+                book.PrintInfo();
             }
+        }
+
+        public void PrintAllBooksByAuthor(string author) {
+            List<Book> books = FindBooksByAuthor(author);
+            
+            Console.WriteLine("\n- All books by author '{0}' are:", author);
+            foreach (Book book in books) {
+                Console.Write("-- ");
+                book.PrintInfo();
+            }
+        }
+
+        public List<Book> GetBooksSinceYear(int year) {
+            List<Book> booksSinceYear = new List<Book>();
+            
+            foreach (Book book in _listOfBooks) {
+                if (year > book.ReleaseYear) {
+                    booksSinceYear.Add(book);
+                }
+            }
+
+            return booksSinceYear;
         }
     }
 }

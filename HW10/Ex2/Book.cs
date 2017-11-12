@@ -28,7 +28,34 @@ namespace HW10.Ex2 {
             _title = title;
             _author = author;
         }
-        
+
+        public string Title {
+            get { return _title; }
+            set {
+                if (value != "") {
+                    _title = value;
+                } else {
+                    Console.WriteLine("Invalid value!");
+                }
+            }
+        }
+
+        public string Author {
+            get { return _author; }
+            set {
+                if (value != "") {
+                    _author = value;
+                } else {
+                    Console.WriteLine("Invalid value!");
+                }
+            }
+        }
+
+        public int ReleaseYear {
+            get { return _releaseYear; }
+            set { _releaseYear = value; }
+        }
+
         public BookGenre Genre { 
             get { return _genre; }
             set { _genre = value; }
@@ -46,31 +73,12 @@ namespace HW10.Ex2 {
             _isBorrowed = false;
         }
 
-        public string Title {
-            get { return _title; }
-            set {
-                if (value != "") {
-                    _title = value;
-                } else {
-                    Console.WriteLine("Invalid value!");
-                }
-            }
-        }
-        
-        public string Author {
-            get { return _author; }
-            set {
-                if (value != "") {
-                    _author = value;
-                } else {
-                    Console.WriteLine("Invalid value!");
-                }
-            }
+        public bool CompareBook(Book book) {
+            return book.Title == _title && book.Author == _author;
         }
 
-        public int ReleaseYear {
-            get { return _releaseYear; }
-            set { _releaseYear = value; }
+        public void PrintInfo() {
+            Console.WriteLine("'{0}' by {1}, {2}", _title, _author, _releaseYear);
         }
     }
 }
