@@ -5,7 +5,8 @@ namespace HW10.Ex2 {
         Horror,
         ScienceFiction,
         Romance,
-        Drama
+        Drama,
+        Fantasy
     }
 
     public class Book {

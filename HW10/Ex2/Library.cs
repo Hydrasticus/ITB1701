@@ -93,20 +93,13 @@ namespace HW10.Ex2 {
             }
         }
 
-        //we return a bool indicating whether a borrowing was successful
         public bool BorrowBook(string bookName) {
             bool wasBorrowingSuccessful = false;
-
-            //we can only borrow if we have this book
             List<Book> books = FindAllBooksByName(bookName);
 
-            //we want to borrow out the first non-borrowed book
             foreach (Book book in books) {
-                //if the book is not already borrowed out
                 if (book.GetBorrowedStatus() != true) {
-                    //then we can borrow it
                     book.BorrowBook();
-                    //we set the bool to be true to indicate that we can borrow
                     wasBorrowingSuccessful = true;
                 }
             }
