@@ -5,14 +5,15 @@ namespace HW14 {
         public void DecodeAccount(string account) {
             string[] inputArray;
             string domain = "";
-            string name = "";
+            string username = "";
 
             if (account.Contains(@"\")) {
                 inputArray = account.Split('\\');
                 domain = inputArray[0];
-                name = inputArray[1];
+                username = inputArray[1];
             } else if (account.Contains("@")) {
                 inputArray = account.Split('@');
+                username = inputArray[0];
                 if (inputArray[1].Contains(".")) {
                     string[] domainArray = inputArray[1].Split('.');
                     domain = domainArray[0];
@@ -21,19 +22,19 @@ namespace HW14 {
                 }
             }
 
-            if (domain.Contains("i:0#w|")) {
+            if (domain.Contains("i:0#.w|")) {
                 string[] domainArray = domain.Split('|');
                 domain = domainArray[1];
             }
 
-            if (name.Contains(".")) {
-                string[] nameArray = name.Split('.');
+            if (username.Contains(".")) {
+                string[] nameArray = username.Split('.');
                 foreach (string n in nameArray) {
                     FirstCharToUpper(nameArray);
                 }
             }
             
-            Console.WriteLine("Name: {0}, Domain: {1}", name, domain);
+            Console.WriteLine("Name: {0}, Domain: {1}", username, domain.ToUpper());
         }
 
         public void EncodeAccount(string account) {
