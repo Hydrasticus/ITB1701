@@ -5,14 +5,9 @@ namespace HW14 {
     internal class Program {
         public static void Main(string[] args) {
             StringManipulator strMani = new StringManipulator();
-            //strMani.DecodeAccount("ttu\\mari.maasikas"); // Name: Mari Maasikas, Domain: TTU
-
-            string input = "sitt";
-            char firstChar = input[0];
-            firstChar = char.ToUpper(firstChar);
-            input.Replace(input[0], firstChar);
-            
-            Console.WriteLine(input);
+            strMani.DecodeAccount("ttu\\mari.maasikas"); // Name: Mari Maasikas, Domain: TTU
+            strMani.DecodeAccount("juhan.kannu.juurikas@ttu.ee"); // Name: Juhan Kannu Juurikas, Domain: TTU
+            strMani.DecodeAccount("i:0#.w|microsoft\\liina.miina"); // Name: Liina Miina, Domain: MICROSOFT
         }
     }
 }

@@ -29,12 +29,11 @@ namespace HW14 {
 
             if (username.Contains(".")) {
                 string[] nameArray = username.Split('.');
-                foreach (string n in nameArray) {
-                    FirstCharToUpper(nameArray);
-                }
+                nameArray = FirstCharToUpper(nameArray);
+                username = string.Join(" ", nameArray);
             }
             
-            Console.WriteLine("Name: {0}, Domain: {1}", username, domain.ToUpper());
+            Console.WriteLine("Name: {0}; Domain: {1}", username, domain.ToUpper());
         }
 
         public void EncodeAccount(string account) {
@@ -42,10 +41,10 @@ namespace HW14 {
         }
 
         private string[] FirstCharToUpper(string[] inputArray) {
-            foreach (string input in inputArray) {
-                char firstChar = input[0];
-                firstChar = char.ToUpper(input[0]);
-                input.Replace(input[0], firstChar);
+            for (int i = 0; i < inputArray.Length; i++) {
+                string input = inputArray[i];
+                char firstChar = char.ToUpper(input[0]);
+                inputArray[i] = firstChar + input.Substring(1, input.Length - 1);
             }
 
             return inputArray;
