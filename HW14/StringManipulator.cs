@@ -32,12 +32,33 @@ namespace HW14 {
                 nameArray = FirstCharToUpper(nameArray);
                 username = string.Join(" ", nameArray);
             }
+
+            domain = domain.ToUpper();
             
-            Console.WriteLine("Name: {0}; Domain: {1}", username, domain.ToUpper());
+            Console.WriteLine("Name: {0}; Domain: {1}", username, domain);
         }
 
         public void EncodeAccount(string account) {
-            
+            string[] inputArray = account.Split(' ');
+            string domain = inputArray[0];
+            string username = "";
+
+            if (inputArray.Length > 3) {
+                for (int i = 1; i < inputArray.Length - 1; i++) {
+                    username += inputArray[i];
+                }
+                username += "." + inputArray[inputArray.Length - 1];
+            } else if (inputArray.Length == 3) {
+                username = inputArray[1] + "." + inputArray[2];
+            } else {
+                username = inputArray[1];
+            }
+
+            username = username.ToLower();
+            domain = domain.ToLower();
+            string shortDomain = domain.Split('.')[0];
+
+            Console.WriteLine("{0}@{1}, {2}\\{0}", username, domain, shortDomain);
         }
 
         private string[] FirstCharToUpper(string[] inputArray) {
