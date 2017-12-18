@@ -5,9 +5,9 @@ namespace HW14 {
     public class Cost {
         private DateTime _date;
         private string _description, _category;
-        private int _amount;
+        private double _amount;
 
-        public Cost(DateTime date, string description, string category, int amount) {
+        public Cost(DateTime date, string description, string category, double amount) {
             Date = date;
             Description = description;
             Category = category;
@@ -29,19 +29,23 @@ namespace HW14 {
             set => _category = value;
         }
 
-        public int Amount {
+        public double Amount {
             get => _amount;
             set => _amount = value;
         }
 
         public void ShowCost() {
             Console.WriteLine("Date: {0}\nDescription: {1}\nCategory: {2}\nAmount: {3}\n",
-                Date, Description, Category, Amount);
+                Date.ToShortDateString(), Description, Category, Amount);
         }
     }
     
     public class AccountingSystem {
         private List<Cost> costs;
+
+        public AccountingSystem() {
+            costs = new List<Cost>();
+        }
 
         public void RunApp() {
             ShowMenu();
@@ -66,6 +70,7 @@ namespace HW14 {
                     case "6":
                         break;
                     case "7":
+                        NormalizeDescriptions();
                         break;
                     case "8":
                         break;
@@ -76,10 +81,6 @@ namespace HW14 {
             }
         }
 
-        public AccountingSystem() {
-            costs = new List<Cost>();
-        }
-
         private void ShowMenu() {
             Console.WriteLine("== Accounting system ==\n1 - Add new entry\n2 - Show all entries of certain category\n" +
                               "3 - Search from entries\n4 - Modify an entry\n5 - Delete an entry\n" +
@@ -88,26 +89,31 @@ namespace HW14 {
         }
         
         private DateTime ReturnDateByDateString(string dateString) {
-            DateTime outputDate;
+            DateTime outputDate = new DateTime();
             
             if (dateString.Length != 8) {
                 outputDate = new DateTime();
             } else {
-                int date = int.Parse(dateString);
-                int day = int.Parse(dateString.Substring(0, 2));
-                int month = int.Parse(dateString.Substring(2, 2));
-                int year = int.Parse(dateString.Substring(4, 4));
-    
-                if (day < 1 || day > 31) {
-                    outputDate = new DateTime();
-                } else if (month < 1 || month > 12) {
-                    outputDate = new DateTime();
-                } else if (year < 1000 || year > 3000) {
-                    outputDate = new DateTime();
-                } else if (!int.TryParse(dateString, out date)) {
-                    outputDate = new DateTime();
-                } else {
-                    outputDate = new DateTime(year, month, day);
+                try {
+                    int date = int.Parse(dateString);
+                    int day = int.Parse(dateString.Substring(0, 2));
+                    int month = int.Parse(dateString.Substring(2, 2));
+                    int year = int.Parse(dateString.Substring(4, 4));
+                    
+                    if (day < 1 || day > 31) {
+                        outputDate = new DateTime();
+                    } else if (month < 1 || month > 12) {
+                        outputDate = new DateTime();
+                    } else if (year < 1000 || year > 3000) {
+                        outputDate = new DateTime();
+                    } else if (!int.TryParse(dateString, out date)) {
+                        outputDate = new DateTime();
+                    } else {
+                        outputDate = new DateTime(year, month, day);
+                    }
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e);
                 }
             }
 
@@ -117,19 +123,30 @@ namespace HW14 {
         private void AddCost() {
             Console.Write("Adding new cost\n Date (DDMMYYYY): ");
             string date = Console.ReadLine();
+            
             Console.Write(" Description: ");
             string description = Console.ReadLine();
+            
             Console.Write(" Category: ");
             string category = Console.ReadLine();
+            
             Console.Write(" Amount: ");
             string amount = Console.ReadLine();
+            
             AddCost(date, description, category, amount);
         }
         
         private void AddCost(string date, string description, string category, string amountString) {
             if (costs.Count < 100) {
                 DateTime correctDate = ReturnDateByDateString(date);
-                int amount = int.Parse(amountString);
+                double amount;
+                
+                try {
+                    amount = double.Parse(amountString);
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e);
+                }
 
                 if (correctDate == new DateTime()) {
                     Console.WriteLine("Enter the date in a correct format! DDMMYYYY");
@@ -137,7 +154,7 @@ namespace HW14 {
                     Console.WriteLine("Enter something as a description!");
                 } else if (string.IsNullOrEmpty(category)) {
                     Console.WriteLine("Enter a category!");
-                } else if (!int.TryParse(amountString, out amount)) {
+                } else if (!double.TryParse(amountString, out amount)) {
                     Console.WriteLine("Incorrect amount!");
                 } else {
                     costs.Add(new Cost(correctDate, description, category, amount));
@@ -151,21 +168,26 @@ namespace HW14 {
         private void PrintAllCostsByCategoryBetweenDates() {
             Console.Write("Enter category: ");
             string category = Console.ReadLine();
+            
             Console.Write("Enter start date: ");
             string startDate = Console.ReadLine();
+            
             Console.Write("Enter end date: ");
             string endDate = Console.ReadLine();
+            
             PrintAllCostsByCategoryBetweenDates(category, startDate, endDate);
         }
         
         private void PrintAllCostsByCategoryBetweenDates(string category, string startDate, string endDate) {
             List<Cost> costsByCategory = GetAllCostsByCategoryBetweenDates(category, startDate, endDate);
 
-            if (costsByCategory == null) {
-                Console.WriteLine("Operation failed! Try again with different inputs!");
+            if (costsByCategory.Count == 0) {
+                Console.WriteLine("No costs found with such cateogry! Press any key to continue.");
             } else {
+                Console.WriteLine("\nFound {0} costs.", costsByCategory.Count);
                 foreach (Cost cost in costsByCategory) {
-                    // TODO: Print out all costs by category
+                    cost.ShowCost();
+                    Console.WriteLine();
                 }
             }
         }
@@ -205,9 +227,10 @@ namespace HW14 {
         private void PrintAllCostsByText(string text) {
             List<Cost> costsByText = GetAllCostsByText(text);
 
-            if (costsByText == null) {
-                Console.WriteLine("Operation failed! Try again with some other search term!");
+            if (costsByText.Count == 0) {
+                Console.WriteLine("No costs found containing the term '{0}'! Press any key to continue.", text);
             } else {
+                Console.WriteLine("\nFound {0} costs containing the term '{1}'.", costsByText.Count, text);
                 foreach (Cost cost in costsByText) {
                     cost.ShowCost();
                     Console.WriteLine();
@@ -230,6 +253,17 @@ namespace HW14 {
             return costsByText;
         }
 
+        private void NormalizeDescriptions() {
+            Console.Write("Enter cost ID: ");
+            try {
+                int costNr = int.Parse(Console.ReadLine());
+                NormalizeDescriptions(costNr);
+            }
+            catch (Exception e) {
+                Console.WriteLine(e);
+            }
+        }
+        
         private void NormalizeDescriptions(int costNr) {
             if (costs[costNr] != null) {
                 costs[costNr].Description = costs[costNr].Description.ToLower();
