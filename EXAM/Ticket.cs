@@ -42,10 +42,10 @@ namespace EXAM {
             set => _seatNr = value;
         }
 
-        public void PrintInfo() {
-            Console.WriteLine("\n== TICKET INFO ==\nName: {0}\nFlight date: {1}\nPrice: {2} €\nFrom: {3}\n" +
-                              "To: {4}\nTicket type: {5}\nSeat number: {6}\nHave a nice flight!\n",
-                PassengerName, FlightDate, Price, Origin, Destination, TicketType, SeatNr);
+        public string ReturnInfo() {
+            return
+                $"== TICKET INFO ==\nName: {PassengerName}\nFlight date: {FlightDate}\nPrice: {Price} €\nFrom: {Origin}" +
+                $"\nTo: {Destination}\nTicket type: {TicketType}\nSeat number: {SeatNr}\nHave a nice flight!\n";
         }
     }
 }

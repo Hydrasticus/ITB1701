@@ -5,7 +5,7 @@
         void PrintTicketInfo();
         void SaveTicketInfo();
         void PrintNrOfFreeSeats();
-        void SellTicket(string buyersName);
-        void SellTicket(string buyersName, string buyingTime);
+        void SellTicket(string name);
+        void SellTicket(string name, string buyingTime);
     }
 }
