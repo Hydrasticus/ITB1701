@@ -8,7 +8,7 @@ namespace EXAM {
         private Dictionary<string, string> CityCodes = new Dictionary<string, string>();
         private List<Ticket> SoldTickets = new List<Ticket>();
         internal DateTime _departureTime;
-        private string _origin, _destination;
+        public string _origin, _destination;
         private double _price;
         internal int _nrOfSeats;
         internal int _ticketType = 1, _priceMultiplier = 2;

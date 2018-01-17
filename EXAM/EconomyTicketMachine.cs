@@ -26,7 +26,7 @@ namespace EXAM {
         }
         
         internal override double CalculateTicketPrice(DateTime buyingTime) {
-            double price = base.CalculateTicketPrice(buyingTime);
+            double price = base.CalculateTicketPrice(buyingTime); //TODO
             
             if (_departureTime.DayOfWeek == DayOfWeek.Friday || _departureTime.DayOfWeek == DayOfWeek.Saturday) {
                  price = price * 1.15;
