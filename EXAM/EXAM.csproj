@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessTicketMachine.cs" />
+    <Compile Include="EconomyTicketMachine.cs" />
     <Compile Include="ExceptionClass.cs" />
     <Compile Include="ITicketMachine.cs" />
     <Compile Include="Program.cs" />
